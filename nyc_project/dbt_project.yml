@@ -1,0 +1,38 @@
+name: 'nyc_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'local'       # Matches the profile name in profiles.yml
+
+model-paths: ["models"]      # Updated from source-paths
+macro-paths: ["macros"]
+test-paths: ["test"]
+seed-paths: ["seeds"]
+analysis-paths: ["analyses"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  nyc_project:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: table
+    mart:
+      +schema: mart
+      +materialized: table
+
+seeds:
+  nyc_project:
+    +materialized: table 
+    +enabled: true
+
+flags:
+  partial_parse: false
+  use_colors: true
+  printer_width: 120
+  send_anonymous_usage_stats: false

@@ -1,0 +1,46 @@
+deploy_dbt:dev:
+  extends:
+    - .only_dev_and_mr_dags_changes
+    - .common_dev_variables
+    - .deploy_dbt_models
+
+deploy_dbt:prd:
+  extends:
+    - .only_prd_changes
+    - .common_prd_variables
+    - .deploy_dbt_models
+
+.deploy_dbt_models:
+  extends:
+    - .dbt_variables
+    - .composer_variables
+    - .prepare_for_dbt_deploy
+    - .deploy_dbt_on_composer
+
+.dbt_variables:
+  variables:
+    DESTINATION_DBT_GCS_FOLDER_NAME: data
+    DBT_SOURCE_FOLDER_NAME: victoria_dbt/
+    GITLAB_CI_JOB_NAME: deploy_dbt
+
+.composer_variables:
+  variables:
+    COMPOSER_REGION: europe-west1
+    GCP_PROJECT_ID: $GOOGLE_CLOUD_DEV_PROJECT_ID
+    COMPOSER_ENVIRONMENT_NAME: main-composer-environment
+
+.prepare_for_dbt_deploy:
+  before_script:
+    - !reference [".gcloud_authentication", "before_script"]
+    # A CI_MERGE_REQUEST_SOURCE_BRANCH_NAME like `feat/my_feature` will generate 2 folders (feat & my_feature)
+    # So we normalize the branch name to remove /
+    - export NORMALIZED_BRANCH_NAME=$(echo $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME | sed  -e s/\\//_/)
+    - export DBT_DESTINATION_FOLDER=${DESTINATION_DBT_GCS_FOLDER_NAME}/${NORMALIZED_BRANCH_NAME:-$ENV}
+    - export COMPOSER_GCS_BUCKET=$(gcloud composer environments describe $COMPOSER_ENVIRONMENT_NAME --location $COMPOSER_REGION --format='value(config.dagGcsPrefix)' | rev | cut -c6- | rev)
+    - echo NORMALIZED_BRANCH_NAME:"$NORMALIZED_BRANCH_NAME"
+    - echo CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:"$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
+    - echo GOOGLE_CLOUD_DEV_PROJECT_ID:"$GOOGLE_CLOUD_DEV_PROJECT_ID"
+    - echo DBT_SOURCE_FOLDER_NAME:"$DBT_SOURCE_FOLDER_NAME"
+    - echo DBT_DESTINATION_FOLDER:"$DBT_DESTINATION_FOLDER"
+    - echo COMPOSER_ENVIRONMENT_NAME="$COMPOSER_ENVIRONMENT_NAME"
+    - echo COMPOSER_GCS_BUCKET="$COMPOSER_GCS_BUCKET"

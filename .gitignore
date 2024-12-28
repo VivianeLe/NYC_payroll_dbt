@@ -1,0 +1,5 @@
+key_files/
+logs/
+target/
+dbt_env/
+google-cloud-cli-426.0.0-darwin-x86_64.tar.gz

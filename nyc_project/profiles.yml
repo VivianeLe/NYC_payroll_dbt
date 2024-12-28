@@ -1,0 +1,40 @@
+# config:
+#   partial_parse: false
+#   use_colors: true
+#   printer_width: 120
+#   send_anonymous_usage_stats: false
+
+config_global: &config_global
+  type: bigquery
+  priority: interactive        # Correct priority
+  dataset: "nyc_project"       # Change to the schema that we want to use, = folder name of project
+  threads: 4
+  location: europe-central2                # Location of your BigQuery dataset
+  job_execution_timeout_seconds: 600
+  retries: 0
+  project: 'prime-phalanx-445915-q1'  # BigQuery project name
+
+config_oauth: &config_oauth
+  <<: *config_global
+  method: oauth
+
+
+config_service_account: &config_service_account
+  <<: *config_global
+  method: service-account
+  keyfile: "{{ ('BIGQUERY_KEYFILE') }}"
+  impersonate_service_account: "{{ ('BIGQUERY_IMPERSONATE_SERVICE_ACCOUNT', '') }}"
+
+nyc_project:                  # Profile name
+  target: dev                 # Default target environment
+  outputs:
+    dev:
+      <<: *config_service_account
+    stg:
+      <<: *config_service_account
+
+local:
+  target: dev
+  outputs:
+    dev:
+      <<: *config_oauth

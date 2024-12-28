@@ -1,0 +1,74 @@
+version: 2
+
+sources:
+  - name: nyc_payroll_source        # BigQuery project name
+    project: 'prime-phalanx-445915-q1'     # BigQuery project name
+    dataset: NYC_payroll                # Dataset name in BigQuery
+    tables:
+      - name: agency_master                # Table name in BigQuery
+        description: "Agency master table"
+        columns:
+          - name: AgencyID      # Column name
+          - name: AgencyName         # Column name
+
+      - name: emp_master           # Another table in the same dataset
+        description: "Employee master table"
+        columns:
+          - name: EmployeeID
+          - name: LastName
+          - name: FirstName
+      
+      - name: payroll2020            # Payroll table for the year 2020
+        description: "Payroll data for fiscal year 2020, including employee information, salaries, and payments."
+        columns:
+          - name: FiscalYear
+          - name: PayrollNumber
+          - name: AgencyID
+          - name: AgencyName
+          - name: EmployeeID
+          - name: LastName
+          - name: FirstName
+          - name: AgencyStartDate
+          - name: WorkLocationBorough
+          - name: TitleCode
+          - name: TitleDescription
+          - name: LeaveStatusasofJune30
+          - name: BaseSalary
+          - name: PayBasis
+          - name: RegularHours
+          - name: RegularGrossPaid
+          - name: OTHours
+          - name: TotalOTPaid
+          - name: TotalOtherPay
+
+      - name: payroll2021            # Payroll table for the year 2021
+        description: "Payroll data for fiscal year 2021, including employee information, salaries, and payments."
+        columns:
+          - name: FiscalYear
+          - name: PayrollNumber
+          - name: AgencyID
+          - name: AgencyName
+          - name: EmployeeID
+          - name: LastName
+          - name: FirstName
+          - name: AgencyStartDate
+          - name: WorkLocationBorough
+          - name: TitleCode
+          - name: TitleDescription
+          - name: LeaveStatusasofJune30
+          - name: BaseSalary
+          - name: PayBasis
+          - name: RegularHours
+          - name: RegularGrossPaid
+          - name: OTHours
+          - name: TotalOTPaid
+          - name: TotalOtherPay
+
+      - name: title_master          # Title master table
+        description: "Master table containing job title codes and descriptions."
+        columns:
+          - name: TitleCode
+          - name: TitleDescription
+
+      
+

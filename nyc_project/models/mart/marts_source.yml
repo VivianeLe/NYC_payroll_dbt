@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: mart_payroll_emp
+    description: >
+      Aggregates payroll data by FiscalYear, AgencyID, AgencyName, EmployeeID, TitleCode, and TitleDescription, 
+      and calculates the total pay for each employee by summing RegularGrossPaid, TotalOTPaid, and TotalOtherPay.
+    columns:
+      - name: FiscalYear
+      - name: AgencyID
+      - name: AgencyName
+      - name: EmployeeID
+      - name: TitleCode
+      - name: TitleDescription
+      - name: TotalPay

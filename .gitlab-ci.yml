@@ -1,0 +1,12 @@
+include:
+  - local: ci/jobs/common.yml
+  - local: ci/jobs/dbt.yml
+
+stages:
+  - deploy_dbt
+
+.deploy_dbt_on_composer:
+  stage: deploy_dbt
+  image: google/cloud-sdk
+  script:
+    - gsutil rsync -x ".dbt_packages/*$|.logs/$|.target/$" -d -r $DBT_SOURCE_FOLDER_NAME ${COMPOSER_GCS_BUCKET}/${DBT_DESTINATION_FOLDER}

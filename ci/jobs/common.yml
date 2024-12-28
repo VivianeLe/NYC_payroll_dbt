@@ -1,0 +1,27 @@
+.only_dev_and_mr_dags_changes:
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_COMMIT_BRANCH == "develop"
+
+.only_prd_changes:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+.common_dev_variables:
+  variables:
+    ENV: dev
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_CLOUD_DEV_SERVICE_KEY
+    GOOGLE_CLOUD_SERVICE_KEY: $GOOGLE_CLOUD_DEV_SERVICE_KEY
+    GOOGLE_CLOUD_PROJECT_ID: $GOOGLE_CLOUD_DEV_PROJECT_ID
+
+.common_prd_variables:
+  variables:
+    ENV: prd
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_CLOUD_PRD_SERVICE_KEY
+    GOOGLE_CLOUD_SERVICE_KEY: $GOOGLE_CLOUD_PRD_SERVICE_KEY
+    GOOGLE_CLOUD_PROJECT_ID: $GOOGLE_CLOUD_PRD_PROJECT_ID
+
+.gcloud_authentication:
+  before_script:
+    - echo ${GOOGLE_CLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json # Google Cloud service accounts
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $GOOGLE_CLOUD_PROJECT_ID

@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: inter_payroll20_21
+    description: "This table calculates the total payments made to employees by summing RegularGrossPaid, TotalOTPaid, and TotalOtherPay."
+    columns:
+      - name: FiscalYear
+      - name: PayrollNumber
+      - name: AgencyID
+      - name: AgencyName
+      - name: EmployeeID
+      - name: LastName
+      - name: FirstName
+      - name: AgencyStartDate
+      - name: WorkLocationBorough
+      - name: TitleCode
+      - name: TitleDescription
+      - name: LeaveStatusasofJune30
+      - name: BaseSalary
+      - name: PayBasis
+      - name: RegularHours
+      - name: RegularGrossPaid
+      - name: OTHours
+      - name: TotalOTPaid
+      - name: TotalOtherPay
+      
